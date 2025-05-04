@@ -1,0 +1,54 @@
+{% extends 'base/layouts/main.html' %}
+{% block content %}
+<!-- Hero Section (Bestsellers) -->
+<section class="py-5 text-center container" style="margin-top: 70px;">
+    <div class="row py-lg-5">
+        <div class="col-lg-6 col-md-8 mx-auto">
+            {% if not request.user.is_authenticated %}
+                <h1 class="fw-light">Bestsellers</h1>
+                <p class="lead text-muted">Our most popular products based on sales. Updated hourly.</p>
+                <p>
+                    <a href="{% url 'login' %}" class="btn btn-primary my-2">Already User</a>
+                    <a href="{% url 'register' %}" class="btn btn-secondary my-2">Register</a>
+                </p>
+            {% endif %}
+        </div>
+    </div>
+</section>
+
+<!-- Categories Section -->
+<section class="bg-light py-4 my-5">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">Categories</h4>
+                <hr style="border-color: #b8bfc2;">
+                {% include 'base/inc/message.html' %}
+            </div>
+            
+            {% for item in category %}
+                <div class="col-6 col-md-4 col-lg-3 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <!-- Image Container (Fixed Height) -->
+                        <div class="card-img-container" style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center; background: #f8f9fa;">
+                            <img 
+                                src="{{item.image.url}}" 
+                                class="img-fluid" 
+                                alt="{{item.name}}"
+                                style="max-height: 100%; width: auto; object-fit: contain;"
+                            >
+                        </div>
+                        <!-- Card Body -->
+                        <a href="{% url 'collections' item.name %}" class="text-decoration-none text-dark">
+                            <div class="card-body">
+                                <h5 class="card-title text-primary">{{item.name}}</h5>
+                                <p class="card-text text-muted">{{item.description}}</p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

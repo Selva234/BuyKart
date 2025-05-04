@@ -1,0 +1,49 @@
+{% extends 'base/layouts/main.html' %}
+
+{% block title %}
+Amazon | Online Shopping
+{% endblock title %}
+
+{% block content %}
+<section class="bg-light py-4 my-5" style="min-height:600px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <h4 class="mb-3">{{category_name}} Products</h4>
+                <hr style="border-color: #b8bfc2;">
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'home' %}">Home</a></li>
+                        <li class="breadcrumb-item"><a href="{% url 'collections' %}">Collections</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">{{category_name}} Collections</li>
+                    </ol>
+                </nav>
+                {% include 'base/inc/message.html' %}
+            </div>
+            {% for item in products %}
+            <div class="col-6 col-md-4 col-lg-3 mb-4">
+                <div class="card h-100">
+                    <div class="card-img-container" style="height: 200px; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+                        <img 
+                            src="{{item.product_image.url}}" 
+                            class="card-img-top img-fluid" 
+                            alt="{{item.name}}"
+                            style="max-height: 100%; width: auto; object-fit: contain;"
+                        >
+                    </div>
+                    <a href="{% url 'product_details' category_name item.name %}" class="text-decoration-none">
+                        <div class="card-body">
+                            <h5 class="card-title text-primary">{{item.name}}</h5>
+                            <p class="card-text">
+                                <span class="text-danger"><s>Rs.{{item.original_price | stringformat:'d'}}</s></span>
+                                <span class="float-end fw-bold text-success">Rs.{{item.selling_price | stringformat:'d'}}</span>
+                            </p>
+                        </div>
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endblock content %}

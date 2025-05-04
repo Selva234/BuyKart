@@ -1,0 +1,93 @@
+{% extends 'base/layouts/main.html' %}
+{% block content %}
+  <section class="bg-light py-4 my-5">
+    <div class="container">
+      <div class="row">
+        <div class="col-12">
+          <h4 class="mb-3">Cart Items</h4>
+          <hr style="border-color: #b8bfc2">
+        </div>
+        <table class="">
+          <tr>
+            <th>Image</th>
+            <th>Product Name</th>
+            <!-- <th>Unit</th> -->
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Remove</th>
+          </tr>
+            
+          {% if cart %}
+
+          {% for item in cart  %}
+            <tr>
+              <td><img src="{{item.product.product_image.url}}" height="75px" alt="{{item.product.name}}"></td>
+              <td>{{item.product.name}}</td>
+              <td>{{item.product_qty}}</td>
+              <td class="amt">{{item.product.selling_price | stringformat:'d'}}</td>
+              <td><a href="{% url 'remove_cart' item.id %}" onclick="return confirm('Are you sure? to Remove')" class="btn btn-danger btn-sm"><i class="fa fa-trash"></i> Remove</a></td>
+            </tr>
+          {% endfor %}
+        </table>
+        <a href="{% url 'billing' %}" onclick="return confirm('Are you sure? to Buy')">
+        <button id="btnOrder" class="place-order-button button-primary">
+          Place your order
+        </button>
+        </a>
+      </div>
+    </div>
+  </div>
+  {% endif %}
+  </section>
+
+  <!-- <script>
+    const nodes = document.querySelectorAll('.amt');
+    const arr = Array.from(nodes);
+    const res = arr.reduce((acc, curr) => {
+      return acc += Number(curr.textContent)
+    }, 0);
+    document.getElementById("net").innerHTML = "Rs: "+res;
+  </script> -->
+
+  <script>
+    document.addEventListener("DOMContentLoaded", function(event) {
+      const btnOrder = document.getElementById("btnFav");
+
+    btnOrder.addEventListener("click", function() {
+      let qty=parseInt(txtQty.value,10);
+      qty=isNaN(qty)?0:qty;
+      
+      if(qty>0){
+        let postObj = { 
+            'product_qty': qty, 
+            'pid': pid.value,
+            'total': total.value,
+            'tax': tax.value,
+            'delivery_charge': delivery_charge.value,
+            'total': total.value,
+        }
+        //console.log(postObj);
+        fetch("/place_order",{
+          method: 'POST',
+          credentials: 'same-origin',
+          headers:{
+              'Accept': 'application/json',
+              'X-Requested-With': 'XMLHttpRequest',
+              'X-CSRFToken': '{{ csrf_token }}',
+          },
+          body: JSON.stringify(postObj)
+        }).then(response => {
+          return response.json();
+        }).then(data => {
+        	//console.log(data);
+          alert(data['status']);
+        });
+
+      }
+      
+  });
+
+
+});
+</script>
+{% endblock content %}

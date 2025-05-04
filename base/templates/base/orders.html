@@ -1,0 +1,59 @@
+{% extends 'base/layouts/main.html' %}
+
+{% block content %}
+
+<div class="main">
+  <div class="page-title">Your Orders</div>
+
+  <div class="orders-grid">
+    <div class="order-container">
+      {% for item in orders %}
+      <div class="order-header">
+        <div class="order-header-left-section">
+          <div class="order-date">
+            <div class="order-header-label">Order Placed:</div>
+            <div>{{item.created_at}}</div>
+          </div>
+          <div class="order-total">
+            <div class="order-header-label">Total:</div>
+            <div>Rs: {{item.total_cost}}</div>
+          </div>
+        </div>
+
+        <div class="order-header-right-section">
+          <div class="order-header-label">Order ID:</div>
+          <div>27cba69d-4c3d-4098-b42d-ac7fa62b7664</div>
+        </div>
+      </div>
+
+      <div class="order-details-grid">
+        <div class="product-image-container">
+          <img src="{{item.product.product_image.url}}">
+        </div>
+
+        <div class="product-details">
+          <div class="product-name">
+            {{item.product.name }}
+          </div>
+          <div class="product-delivery-date">
+            Arriving on: August 15
+          </div>
+          <div class="product-quantity">
+            Quantity: 1
+          </div>
+        </div>
+
+        <div class="product-actions">
+          <a href="{% url 'track' %}">
+            <button class="track-package-button button-secondary">
+              Track package
+            </button>
+          </a>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    </div>
+  </div>
+</div>
+{% endblock content %}
